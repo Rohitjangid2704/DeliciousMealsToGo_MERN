@@ -23,13 +23,11 @@
 
 ## Description
 
-- This website is built with the MERN stack (MongoDB, Express.js, React, and Node.js).
-- It has the following functionalities:
-  - Add to cart
-  - Log in and log out
-  - Like a dish
-  - Filter according to food categories
-
+- This website is a full-stack application built using the MERN stack, which includes MongoDB for the database, Express.js for the server-side framework, React for the client-side library, and Node.js for the server runtime environment.
+- Add to Cart: Users can easily add their favorite dishes to a shopping cart for a seamless ordering experience.
+- User Authentication: Secure log in and log out functionality to ensure user accounts are protected.
+- Like a Dish: Users can like dishes, helping to highlight popular items.
+- Food Filtering: Advanced filtering options allow users to sort dishes according to different food categories, making it easier to find desired meals.
 ## Available Scripts
 
 In the project directory, you can run:
