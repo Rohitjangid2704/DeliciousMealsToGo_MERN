@@ -1,3 +1,43 @@
+# DeliciousMealsToGo_MERN
+
+
+## Screenshots
+
+![Home Page](https://github.com/Rohitjangid2704/DeliciousMealsToGo_MERN/blob/main/Screen_shot/React-App%20(4).png)
+*Home Page*
+
+
+![Item](https://github.com/Rohitjangid2704/DeliciousMealsToGo_MERN/blob/main/React-App%20(1).png)
+*Item*
+
+![Filter](https://github.com/Rohitjangid2704/DeliciousMealsToGo_MERN/blob/main/Screen_shot/React-App%20(2).png)
+*Filter*
+
+![SignUp](https://github.com/Rohitjangid2704/DeliciousMealsToGo_MERN/blob/main/Screen_shot/React-App%20(3).png)
+*Create NEw Account Page*
+
+![Login Page](https://github.com/Rohitjangid2704/DeliciousMealsToGo_MERN/blob/main/Screen_shot/React-App%20(1).png)
+*Login Page*
+
+
+
+## Description
+
+- This website is built with the MERN stack (MongoDB, Express.js, React, and Node.js).
+- It has the following functionalities:
+  - Add to cart
+  - Log in and log out
+  - Like a dish
+  - Filter according to food categories
+
+## Available Scripts
+
+In the project directory, you can run:
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
