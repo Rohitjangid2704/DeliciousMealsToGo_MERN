@@ -6,7 +6,6 @@ import {
   FavoriteBorder,
   FavoriteRounded,
   ShoppingBagOutlined,
-  ShoppingCart,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import {
@@ -121,6 +120,11 @@ const Price = styled.div`
   font-size: 18px;
   font-weight: 500;
   color: ${({ theme }) => theme.text_primary};
+  ::before {
+    content: "₹";
+    font-size: 16px;
+    color: ${({ theme }) => theme.text_primary};
+  }
 `;
 const Percent = styled.div`
   font-size: 12px;
@@ -144,97 +148,98 @@ const ProductsCard = ({ product }) => {
   const addFavourite = async () => {
     setFavoriteLoading(true);
     const token = localStorage.getItem("krist-app-token");
-    await addToFavourite(token, { productId: product?._id })
-      .then((res) => {
-        setFavorite(true);
-        setFavoriteLoading(false);
-      })
-      .catch((err) => {
-        setFavoriteLoading(false);
-        console.log(err);
-        dispatch(
-          openSnackbar({
-            message: err.response.data.message,
-            severity: "error",
-          })
-        );
-      });
+    try {
+      await addToFavourite(token, { productId: product?._id });
+      setFavorite(true);
+    } catch (err) {
+      console.log(err);
+      dispatch(
+        openSnackbar({
+          message: err.response.data.message,
+          severity: "error",
+        })
+      );
+    } finally {
+      setFavoriteLoading(false);
+    }
   };
 
   const removeFavourite = async () => {
     setFavoriteLoading(true);
     const token = localStorage.getItem("krist-app-token");
-    await deleteFromFavourite(token, { productId: product?._id })
-      .then((res) => {
-        setFavorite(false);
-        setFavoriteLoading(false);
-      })
-      .catch((err) => {
-        setFavoriteLoading(false);
-        dispatch(
-          openSnackbar({
-            message: err.response.data.message,
-            severity: "error",
-          })
-        );
-      });
+    try {
+      await deleteFromFavourite(token, { productId: product?._id });
+      setFavorite(false);
+    } catch (err) {
+      console.log(err);
+      dispatch(
+        openSnackbar({
+          message: err.response.data.message,
+          severity: "error",
+        })
+      );
+    } finally {
+      setFavoriteLoading(false);
+    }
   };
 
   const checkFavorite = async () => {
     setFavoriteLoading(true);
     const token = localStorage.getItem("krist-app-token");
-    await getFavourite(token, { productId: product?._id })
-      .then((res) => {
-        const isFavorite = res.data?.some(
-          (favorite) => favorite._id === product?._id
-        );
-
-        setFavorite(isFavorite);
-
-        setFavoriteLoading(false);
-      })
-      .catch((err) => {
-        setFavoriteLoading(false);
-        dispatch(
-          openSnackbar({
-            message: err.response.data.message,
-            severity: "error",
-          })
-        );
-      });
+    try {
+      const res = await getFavourite(token, { productId: product?._id });
+      const isFavorite = res.data?.some((favorite) => favorite._id === product?._id);
+      setFavorite(isFavorite);
+    } catch (err) {
+      console.log(err);
+      dispatch(
+        openSnackbar({
+          message: err.response.data.message,
+          severity: "error",
+        })
+      );
+    } finally {
+      setFavoriteLoading(false);
+    }
   };
 
   const addCart = async (id) => {
     const token = localStorage.getItem("krist-app-token");
-    await addToCart(token, { productId: id, quantity: 1 })
-      .then((res) => {
-        navigate("/cart");
-      })
-      .catch((err) => {
-        dispatch(
-          openSnackbar({
-            message: err.response.data.message,
-            severity: "error",
-          })
-        );
-      });
+    try {
+      await addToCart(token, { productId: id, quantity: 1 });
+      navigate("/cart");
+    } catch (err) {
+      console.log(err);
+      dispatch(
+        openSnackbar({
+          message: err.response.data.message,
+          severity: "error",
+        })
+      );
+    }
   };
 
   useEffect(() => {
     checkFavorite();
   }, [favorite]);
+
+  // Calculate discounted price
+  const discountedPrice = (price, discount) => {
+    if (price && discount) {
+      const discounted = price - (price * discount) / 100;
+      return discounted.toFixed(2); // Adjust decimals as needed
+    }
+    return price;
+  };
+
   return (
     <Card>
       <Top>
         <Image src={product?.img} />
         <Menu>
-          <MenuItem
-            onClick={() => (favorite ? removeFavourite() : addFavourite())}
-          >
+          <MenuItem onClick={() => (favorite ? removeFavourite() : addFavourite())}>
             {favoriteLoading ? (
-              <>
-                <CircularProgress sx={{ fontSize: "20px" }} />
-              </>
+              <CircularProgress sx={{ fontSize: "20px" }} />
             ) : (
               <>
                 {favorite ? (
@@ -257,8 +262,9 @@ const ProductsCard = ({ product }) => {
         <Title>{product?.name}</Title>
         <Desc>{product?.desc}</Desc>
         <Price>
-          ${product?.price?.org} <Span>${product?.price?.mrp}</Span>
-          <Percent> (${product?.price?.off}% Off) </Percent>
+          ₹{discountedPrice(product?.price?.org, product?.price?.off)}
+          <Span>₹{product?.price?.mrp}</Span>
+          <Percent> ({product?.price?.off}% Off) </Percent>
         </Price>
       </Details>
     </Card>
